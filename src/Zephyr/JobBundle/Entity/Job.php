@@ -25,6 +25,11 @@ class Job extends BaseUser
     private $title;
 
     /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $short_content;
+
+    /**
      * @ORM\Column(type="text", length=65535)
      */
     private $content;
