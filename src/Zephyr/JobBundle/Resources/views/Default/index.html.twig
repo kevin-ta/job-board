@@ -1,1 +1,15 @@
-Hello {{ name }}!
+{% extends '::base.html.twig' %}  
+
+{% block body %}
+	<img src="{{ asset('css/logo.png') }}" class="img-responsive" align="middle"></img>
+	<div class="compteur">
+		<ul>
+			<li>
+				<p>25<br><span>jobs<br>en ligne</span></p>
+			</li>
+			<li>
+				<p>13<br><span>offres<br>validées</span></p>
+			</li>
+		</ul>
+	</div>
+{% endblock %}
