@@ -10,7 +10,7 @@ use FOS\UserBundle\Model\User as BaseUser;
  * @ORM\Table(name="category")
  * @ORM\Entity(repositoryClass="Zephyr\JobBundle\Entity\CategoryRepository")
  */
-class Category extends BaseUser
+class Category
 {
     /**
      * @ORM\Id
