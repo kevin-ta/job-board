@@ -10,14 +10,19 @@ body
 	-webkit-background-size: cover; /* pour anciens Chrome et Safari */
 	background-size: cover; /* version standard */
 	text-align: center;
-	color: #fff;
+	color: #ffffff;
 	font-family:ZonaPro-Regular, sans-serif;
 	padding-top:75px;
 }
 
+.navbar-default .navbar-toggle .icon-bar
+{
+	background-color: #ffffff;
+}
+
 a 
 {
-	color: #fff;
+	color: #ffffff;
 }
  
 .navbar-default
@@ -61,6 +66,11 @@ color: #000;  /*Sets the text hover color on navbar*/
 {
    	color: white; /*Change active text color here*/
 }
+
+.img-responsive
+{
+    margin: 0 auto;
+}
 	
 .compteur
 {
@@ -76,11 +86,12 @@ color: #000;  /*Sets the text hover color on navbar*/
 	list-style:none;
 }
 
-.compteur span {
-	color: #fff;
+.compteur span
+{
+	color: #ffffff;
 	font-size: 18px;
 	line-height: 10px;
-	}
+}
 	
 	
 .jobs #ticket {
