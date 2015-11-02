@@ -1,129 +1,161 @@
 @font-face 
 {
-	font-family: 'ZonaPro-Regular';
-	src: url('fonts/zonapro-regular-webfont.ttf');
+    font-family: 'ZonaPro-Regular';
+    src: url('fonts/zonapro-regular-webfont.ttf');
 }
 
 body
 {
-	background: url(bg.jpg) no-repeat center fixed; 
-	-webkit-background-size: cover; /* pour anciens Chrome et Safari */
-	background-size: cover; /* version standard */
-	text-align: center;
-	color: #ffffff;
-	font-family:ZonaPro-Regular, sans-serif;
-	padding-top:75px;
+    background: url(bg.jpg) no-repeat center fixed; 
+    -webkit-background-size: cover; /* pour anciens Chrome et Safari */
+    background-size: cover; /* version standard */
+    text-align: center;
+    color: #ffffff;
+    font-family:ZonaPro-Regular, sans-serif;
+    padding-top:75px;
+    padding-bottom:75px;
 }
 
 .navbar-default .navbar-toggle .icon-bar
 {
-	background-color: #ffffff;
+    background-color: #ffffff;
 }
 
 a 
 {
-	color: #ffffff;
+    color: #ffffff;
+}
+
+a:hover
+{
+    color: #ffffff;
+    text-decoration: none;
 }
  
 .navbar-default
 {
-	background-color: #6f919e;
-	border-color: #6f919e;
-	font-size:1.2em;
+    background-color: #6f919e;
+    border-color: #6f919e;
+    font-size:1.2em;
 }
 
 .navbar-default .navbar-nav > li > a:hover, .navbar-default .navbar-nav > li > a:focus {
-color: #000;  /*Sets the text hover color on navbar*/
+    color: #000;  /*Sets the text hover color on navbar*/
 }
 
 .navbar-default .navbar-brand
 {
-	color: #ffffff;
+    color: #ffffff;
 }
 
 .navbar-default .navbar-nav > .active > a, .navbar-default .navbar-nav > .active >   
  a:hover, .navbar-default .navbar-nav > .active > a:focus
 {
-	color: #ffffff; /*BACKGROUND color for active*/
-	background-color: #030033;
+    color: #ffffff; /*BACKGROUND color for active*/
+    background-color: #030033;
 }
 
 .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus
 {
-	color: #262626;
-	text-decoration: none;
-	background-color: #66CCFF;  /*change color of links in drop down here*/
+    color: #262626;
+    text-decoration: none;
+    background-color: #66CCFF;  /*change color of links in drop down here*/
 }
 
 .nav > li > a:hover, .nav > li > a:focus
 {
-    	text-decoration: none;
-    	background-color: silver; /*Change rollover cell color here*/
+    text-decoration: none;
+    background-color: silver; /*Change rollover cell color here*/
 }
 
 
 .navbar-default .navbar-nav > li > a
 {
-   	color: white; /*Change active text color here*/
+    color: white; /*Change active text color here*/
 }
 
 .img-responsive
 {
     margin: 0 auto;
 }
-	
+    
 .compteur
 {
-	font-size: 4em;
-	color: #8FB8C9;
-	line-height: 30px;
+    font-size: 4em;
+    color: #8FB8C9;
+    line-height: 30px;
+    text-align: center;
+}
+
+.compteur ul
+{
+    margin: 0 auto;
+    display: inline-block;
+    margin-right: 50px;
 }
 
 .compteur li
 {
-	float: left;
-	padding-left: 20px;
-	list-style:none;
+    float: left;
+    padding-left: 20px;
+    list-style:none;
 }
 
 .compteur span
 {
-	color: #ffffff;
-	font-size: 18px;
-	line-height: 10px;
+    color: #ffffff;
+    font-size: 18px;
+    line-height: 10px;
 }
-	
-	
-.jobs #ticket {
-	
-	background-color:rgba(111,145,157,0.5);
-	width:20%;
-	height:180px;
-	float:left;
-	margin-left:8%;
-	margin-bottom:5%;
-	padding:1%;
-	-moz-transition:-moz-transform .15s linear;
-	-o-transition:-o-transform .15s linear;
-	-webkit-transition:-webkit-transform .15s linear;
-	}
-	
-.jobs {
-	margin-top: 40%;
-	position: absolute;
-	width:100%;
-	}
 
-.jobs p {
-	opacity:1;
-	}
+.jobs
+{
+    margin:10px; padding:10px;
+}
 
-	
-.jobs #ticket:hover,#ticket:focus{
+.jobs #ticket
+{
+    background-color:rgba(111,145,157,0.5);
+    width:100%;
+    height:180px;
+    -moz-transition:-moz-transform .15s linear;
+    -o-transition:-o-transform .15s linear;
+    -webkit-transition:-webkit-transform .15s linear;
+}
 
-	-webkit-transform: scale(1.1);
-	-moz-transform: scale(1.1);
-	-o-transform: scale(1.1);
-	z-index:4;
-	background-color:rgba(111,145,157,1);
+.jobs p
+{
+    opacity:1;
+}
+
+.jobs #ticket:hover,#ticket:focus
+{
+    -webkit-transform: scale(1.1);
+    -moz-transform: scale(1.1);
+    -o-transform: scale(1.1);
+    z-index:4;
+    background-color:rgba(111,145,157,1);
+}
+
+.alert-danger {
+    background-color: #E51C23;
+}
+
+.alert a:not(.close), .alert .alert-link {
+    color: #FFF;
+    font-weight: bold;
+}
+
+.alert-danger {
+    color: #fff;
+}
+
+.alert-dismissable .close, .alert-dismissible .close
+{
+    color: #000;
+}
+
+.alert-dismissable .close, .alert-dismissible .close
+{
+    color: #000;
 }

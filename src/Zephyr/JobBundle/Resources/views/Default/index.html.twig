@@ -2,14 +2,34 @@
 
 {% block body %}
 	<img src="{{ asset('css/logo.png') }}" class="img-responsive" align="middle"></img>
+	<br><br>
 	<div class="compteur">
 		<ul>
 			<li>
-				<p>25<br><span>jobs<br>en ligne</span></p>
+				<p>{{ total }}<br><span>job{% if total != 1 %}s{% endif %}<br>en ligne</span></p>
 			</li>
 			<li>
-				<p>13<br><span>offres<br>validées</span></p>
+				<p>{{ valid }}<br><span>offre{% if valid != 1 %}s{% endif %}<br>validée{% if valid != 1 %}s{% endif %}</span></p>
 			</li>
 		</ul>
+	</div>
+	<br><br>
+	<div class="row">
+		{% for job in jobs %}
+			{% if job.valid != 0 %}
+				<div class="col-md-4 col-sm-6 col-sm">
+					<div class="jobs">
+						<a href="#">
+							<div id="ticket">
+								<br>
+								<h4><b>{{ job.title }}</b></h4>
+								<p>{{ job.category }}</p><br>
+								{{ job.shortcontent }}
+							</div>
+						</a>
+					</div>
+				</div>
+			{% endif %}
+		{% endfor %}
 	</div>
 {% endblock %}
