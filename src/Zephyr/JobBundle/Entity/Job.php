@@ -35,6 +35,26 @@ class Job
     private $content;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $valid;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $done;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $date;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $expire;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Zephyr\JobBundle\Entity\Category")
      */
     private $category;
@@ -138,5 +158,63 @@ class Job
     public function getIdUser()
     {
         return $this->id_user;
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set shortContent
+     *
+     * @param string $shortContent
+     *
+     * @return Job
+     */
+    public function setShortContent($shortContent)
+    {
+        $this->short_content = $shortContent;
+
+        return $this;
+    }
+
+    /**
+     * Get shortContent
+     *
+     * @return string
+     */
+    public function getShortContent()
+    {
+        return $this->short_content;
+    }
+
+    /**
+     * Set valid
+     *
+     * @param boolean $valid
+     *
+     * @return Job
+     */
+    public function setValid($valid)
+    {
+        $this->valid = $valid;
+
+        return $this;
+    }
+
+    /**
+     * Get valid
+     *
+     * @return boolean
+     */
+    public function getValid()
+    {
+        return $this->valid;
     }
 }
