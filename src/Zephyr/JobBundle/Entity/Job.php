@@ -217,4 +217,76 @@ class Job
     {
         return $this->valid;
     }
+
+    /**
+     * Set done
+     *
+     * @param boolean $done
+     *
+     * @return Job
+     */
+    public function setDone($done)
+    {
+        $this->done = $done;
+
+        return $this;
+    }
+
+    /**
+     * Get done
+     *
+     * @return boolean
+     */
+    public function getDone()
+    {
+        return $this->done;
+    }
+
+    /**
+     * Set date
+     *
+     * @param \DateTime $date
+     *
+     * @return Job
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+
+        return $this;
+    }
+
+    /**
+     * Get date
+     *
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * Set expire
+     *
+     * @param boolean $expire
+     *
+     * @return Job
+     */
+    public function setExpire($expire)
+    {
+        $this->expire = $expire;
+
+        return $this;
+    }
+
+    /**
+     * Get expire
+     *
+     * @return boolean
+     */
+    public function getExpire()
+    {
+        return $this->expire;
+    }
 }

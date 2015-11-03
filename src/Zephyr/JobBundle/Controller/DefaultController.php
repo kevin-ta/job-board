@@ -15,11 +15,11 @@ class DefaultController extends Controller
         $not_valid = 0;
     	for ($i = 0; $i < $total; $i++)
     	{
-    		if ($status = $jobs[$i]->getValid() != null)
+    		if ($jobs[$i]->getValid() != null and $jobs[$i]->getDone() == null and $jobs[$i]->getExpire() == null)
     		{
     			$valid = $valid + 1;
     		}
-            if ($status = $jobs[$i]->getValid() == null)
+            if ($jobs[$i]->getValid() == null)
             {
                 $not_valid = $not_valid + 1;
             }

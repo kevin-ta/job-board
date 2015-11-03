@@ -16,7 +16,7 @@
 	<br><br>
 	<div class="row">
 		{% for job in jobs %}
-			{% if job.valid != 0 %}
+			{% if job.valid != 0 and job.done == 0 and job.expire == 0 %}
 				<div class="col-md-4 col-sm-6 col-sm">
 					<div class="jobs">
 						<a href="#">
