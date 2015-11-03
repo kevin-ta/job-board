@@ -12,17 +12,22 @@ class DefaultController extends Controller
     	$jobs = $em->getRepository('ZephyrJobBundle:Job')->findAll();
     	$total = count($jobs);
     	$valid = 0;
+        $not_valid = 0;
     	for ($i = 0; $i < $total; $i++)
     	{
     		if ($status = $jobs[$i]->getValid() != null)
     		{
     			$valid = $valid + 1;
     		}
+            if ($status = $jobs[$i]->getValid() == null)
+            {
+                $not_valid = $not_valid + 1;
+            }
     	}
 
         return $this->render('ZephyrJobBundle:Default:index.html.twig', array(
             'jobs' => $jobs,
-            'total' => $total,
+            'notvalid' => $not_valid,
             'valid' => $valid,
         ));
     }

@@ -6,10 +6,10 @@
 	<div class="compteur">
 		<ul>
 			<li>
-				<p>{{ total }}<br><span>job{% if total != 1 %}s{% endif %}<br>en ligne</span></p>
+				<p>{{ valid }}<br><span>job{% if valid != 1 and valid != 0 %}s{% endif %}<br>en ligne</span></p>
 			</li>
 			<li>
-				<p>{{ valid }}<br><span>offre{% if valid != 1 %}s{% endif %}<br>validée{% if valid != 1 %}s{% endif %}</span></p>
+				<p>{{ notvalid }}<br><span>offre{% if notvalid != 1 and notvalid != 0 %}s{% endif %}<br>en validation</span></p>
 			</li>
 		</ul>
 	</div>
