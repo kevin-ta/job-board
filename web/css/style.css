@@ -159,3 +159,11 @@ a:hover
 {
     color: #000;
 }
+
+input, select, textarea{
+    color: #000;
+}
+
+textarea:focus, input:focus {
+    color: #000;
+}
