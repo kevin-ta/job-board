@@ -4,6 +4,8 @@ namespace Zephyr\JobBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Zephyr\JobBundle\Entity\Job;
+use Zephyr\JobBundle\Form\JobType;
 
 class DefaultController extends Controller
 {
@@ -39,6 +41,8 @@ class DefaultController extends Controller
         $um = $this->get('fos_user.user_manager');
         $job = $em->getRepository('ZephyrJobBundle:Job')->findOneById($id);
         $user = $this->get('security.context')->getToken()->getUser();
+        $owner = $job->getOwner();
+        $list = $job->getCandidats();
 
         if($job->getValid() == null || $job->getDone() != null || $job->getExpire() != null)
         {
@@ -49,8 +53,14 @@ class DefaultController extends Controller
 
         if($request->isMethod('POST'))
         {
-            $list = $job->getCandidats();
-
+            if($user == $owner)
+            {
+                return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
+                    'error' => 'Vous ne pouvez pas postuler à une annonce que vous avez créée.',
+                    'job' => $job,
+                ));
+            }
+            
             for($i = 0; $i < count($list); $i++)
             {
                 if($user == $list[$i])
@@ -74,6 +84,72 @@ class DefaultController extends Controller
 
         return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
             'job' => $job,
+        ));
+    }
+
+    public function createAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $um = $this->get('fos_user.user_manager');
+        $user = $this->get('security.context')->getToken()->getUser();
+        $job = new Job();
+        $form = $this->createForm(new JobType($em), $job);
+
+        if($request->isMethod('POST'))
+        {
+            $form->handleRequest($request);
+
+            if(! $form->isValid())
+            {
+                return $this->render('ZephyrJobBundle:Default:create.html.twig', array(
+                    'error' => 'Erreur dans le formulaire.',
+                    'job' => $job,
+                ));
+            }
+
+            $job->setOwner($user);
+            $em->persist($job);
+            $em->flush();
+
+            return $this->render('ZephyrJobBundle:Default:create.html.twig', array(
+                'success' => 'Votre demande va être étudiée par notre équipe Jobs.',
+                'job' => $job,
+            ));
+        }
+
+        return $this->render('ZephyrJobBundle:Default:create.html.twig', array(
+            'job' => $job,
+            'form' => $form->createView(),
+        ));
+    }
+
+    public function neAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $ne = new Ne();
+        $form = $this->createForm(new NeType($em), $ne);
+        $list_ne = $em->getRepository('JiwonAdminBundle:Ne')->findAll();
+
+        if($request->isMethod('POST'))
+        {            
+            $form->handleRequest($request);
+
+            if(! $form->isValid())
+            {
+                return $this->render('JiwonAdminBundle:Default:success.html.twig', array(
+                    'error' => 'Le formulaire est mal rempli.'
+                ));
+            }
+
+            $em->persist($ne);
+            $em->flush();
+
+            return $this->redirectToRoute('jiwon_ne');
+        }
+
+        return $this->render('JiwonAdminBundle:Default:ne.html.twig', array(
+            'form' => $form->createView(),
+            'list_ne' => $list_ne,
         ));
     }
 }
