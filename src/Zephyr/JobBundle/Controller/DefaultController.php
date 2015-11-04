@@ -122,34 +122,4 @@ class DefaultController extends Controller
             'form' => $form->createView(),
         ));
     }
-
-    public function neAction(Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $ne = new Ne();
-        $form = $this->createForm(new NeType($em), $ne);
-        $list_ne = $em->getRepository('JiwonAdminBundle:Ne')->findAll();
-
-        if($request->isMethod('POST'))
-        {            
-            $form->handleRequest($request);
-
-            if(! $form->isValid())
-            {
-                return $this->render('JiwonAdminBundle:Default:success.html.twig', array(
-                    'error' => 'Le formulaire est mal rempli.'
-                ));
-            }
-
-            $em->persist($ne);
-            $em->flush();
-
-            return $this->redirectToRoute('jiwon_ne');
-        }
-
-        return $this->render('JiwonAdminBundle:Default:ne.html.twig', array(
-            'form' => $form->createView(),
-            'list_ne' => $list_ne,
-        ));
-    }
 }
