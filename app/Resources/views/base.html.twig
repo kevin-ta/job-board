@@ -29,11 +29,12 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbar">
                     <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{{ path('zephyr_job_create') }}">POSTER UN JOB</a></li>
                         {% if app.user is null %}
                             <li><a href="{{ path('fos_user_registration_register') }}">S'INSCRIRE</a></li>
                             <li><a href="{{ path('fos_user_security_login') }}">CONNEXION</a></li>
                         {% else %}
-                            <li><a href="#">MES ANNONCES</a></li>
+                            <li><a href="{{ path('fos_user_profile_show') }}">MES ANNONCES</a></li>
                             <li><a href="{{ path('fos_user_security_logout') }}">DECONNEXION</a></li>
                         {% endif %}
                     </ul>
