@@ -41,15 +41,14 @@ class DefaultController extends Controller
         $um = $this->get('fos_user.user_manager');
         $job = $em->getRepository('ZephyrJobBundle:Job')->findOneById($id);
         $user = $this->get('security.context')->getToken()->getUser();
+
+        if($job == null || $job->getValid() == null || $job->getDone() != null || $job->getExpire() != null)
+        {
+            return $this->redirectToRoute('zephyr_job_homepage');
+        }
+
         $owner = $job->getOwner();
         $list = $job->getCandidats();
-
-        if($job->getValid() == null || $job->getDone() != null || $job->getExpire() != null)
-        {
-            return $this->render('ZephyrJobBundle:Default:success.html.twig', array(
-                'error' => 'Job invalide',
-            ));
-        }
 
         if($request->isMethod('POST'))
         {
