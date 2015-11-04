@@ -62,12 +62,29 @@ class Job
     /**
      * @ORM\ManyToOne(targetEntity="Zephyr\UserBundle\Entity\User")
      */
-    private $id_user;
+    private $owner;
 
     /**
      * @ORM\ManyToMany(targetEntity="Zephyr\UserBundle\Entity\User", inversedBy="jobs")
      */
     private $candidats;
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->candidats = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Get id
+     *
+     * @return integer
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
 
     /**
      * Set title
@@ -94,88 +111,6 @@ class Job
     }
 
     /**
-     * Set content
-     *
-     * @param string $content
-     *
-     * @return Job
-     */
-    public function setContent($content)
-    {
-        $this->content = $content;
-
-        return $this;
-    }
-
-    /**
-     * Get content
-     *
-     * @return string
-     */
-    public function getContent()
-    {
-        return $this->content;
-    }
-
-    /**
-     * Set category
-     *
-     * @param \Zephyr\JobBundle\Entity\Category $category
-     *
-     * @return Job
-     */
-    public function setCategory(\Zephyr\JobBundle\Entity\Category $category = null)
-    {
-        $this->category = $category;
-
-        return $this;
-    }
-
-    /**
-     * Get category
-     *
-     * @return \Zephyr\JobBundle\Entity\Category
-     */
-    public function getCategory()
-    {
-        return $this->category;
-    }
-
-    /**
-     * Set idUser
-     *
-     * @param \Zephyr\UserBundle\Entity\User $idUser
-     *
-     * @return Job
-     */
-    public function setIdUser(\Zephyr\UserBundle\Entity\User $idUser = null)
-    {
-        $this->id_user = $idUser;
-
-        return $this;
-    }
-
-    /**
-     * Get idUser
-     *
-     * @return \Zephyr\UserBundle\Entity\User
-     */
-    public function getIdUser()
-    {
-        return $this->id_user;
-    }
-
-    /**
-     * Get id
-     *
-     * @return integer
-     */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    /**
      * Set shortContent
      *
      * @param string $shortContent
@@ -197,6 +132,30 @@ class Job
     public function getShortContent()
     {
         return $this->short_content;
+    }
+
+    /**
+     * Set content
+     *
+     * @param string $content
+     *
+     * @return Job
+     */
+    public function setContent($content)
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
+    /**
+     * Get content
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
     }
 
     /**
@@ -294,12 +253,53 @@ class Job
     {
         return $this->expire;
     }
+
     /**
-     * Constructor
+     * Set category
+     *
+     * @param \Zephyr\JobBundle\Entity\Category $category
+     *
+     * @return Job
      */
-    public function __construct()
+    public function setCategory(\Zephyr\JobBundle\Entity\Category $category = null)
     {
-        $this->candidats = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \Zephyr\JobBundle\Entity\Category
+     */
+    public function getCategory()
+    {
+        return $this->category;
+    }
+
+    /**
+     * Set owner
+     *
+     * @param \Zephyr\UserBundle\Entity\User $owner
+     *
+     * @return Job
+     */
+    public function setOwner(\Zephyr\UserBundle\Entity\User $owner = null)
+    {
+        $this->owner = $owner;
+
+        return $this;
+    }
+
+    /**
+     * Get owner
+     *
+     * @return \Zephyr\UserBundle\Entity\User
+     */
+    public function getOwner()
+    {
+        return $this->owner;
     }
 
     /**
