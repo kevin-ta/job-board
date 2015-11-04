@@ -29,6 +29,11 @@ class User extends BaseUser
      */
     private $lastname;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Zephyr\JobBundle\Entity\Job", mappedBy="candidats")
+     */
+    private $jobs;
+
     public function __construct()
     {
         parent::__construct();
@@ -80,5 +85,39 @@ class User extends BaseUser
     public function getLastname()
     {
         return $this->lastname;
+    }
+
+    /**
+     * Add job
+     *
+     * @param \Zephyr\JobBundle\Entity\Job $job
+     *
+     * @return User
+     */
+    public function addJob(\Zephyr\JobBundle\Entity\Job $job)
+    {
+        $this->jobs[] = $job;
+
+        return $this;
+    }
+
+    /**
+     * Remove job
+     *
+     * @param \Zephyr\JobBundle\Entity\Job $job
+     */
+    public function removeJob(\Zephyr\JobBundle\Entity\Job $job)
+    {
+        $this->jobs->removeElement($job);
+    }
+
+    /**
+     * Get jobs
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getJobs()
+    {
+        return $this->jobs;
     }
 }

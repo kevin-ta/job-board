@@ -3,6 +3,7 @@
 namespace Zephyr\JobBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
@@ -29,6 +30,50 @@ class DefaultController extends Controller
             'jobs' => $jobs,
             'notvalid' => $not_valid,
             'valid' => $valid,
+        ));
+    }
+
+    public function jobAction($id, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $um = $this->get('fos_user.user_manager');
+        $job = $em->getRepository('ZephyrJobBundle:Job')->findOneById($id);
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if($job->getValid() == null || $job->getDone() != null || $job->getExpire() != null)
+        {
+            return $this->render('ZephyrJobBundle:Default:success.html.twig', array(
+                'error' => 'Job invalide',
+            ));
+        }
+
+        if($request->isMethod('POST'))
+        {
+            $list = $job->getCandidats();
+
+            for($i = 0; $i < count($list); $i++)
+            {
+                if($user == $list[$i])
+                {
+                    return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
+                        'error' => 'Vous avez déjà postulé à ce job.',
+                        'job' => $job,
+                    ));
+                }
+            }
+
+            $job->AddCandidat($user);
+            $em->persist($job);
+            $em->flush();
+
+            return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
+                'success' => 'Votre demande va être étudiée par notre équipe Jobs.',
+                'job' => $job,
+            ));
+        }
+
+        return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
+            'job' => $job,
         ));
     }
 }

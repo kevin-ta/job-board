@@ -65,6 +65,11 @@ class Job
     private $id_user;
 
     /**
+     * @ORM\ManyToMany(targetEntity="Zephyr\UserBundle\Entity\User", inversedBy="jobs")
+     */
+    private $candidats;
+
+    /**
      * Set title
      *
      * @param string $title
@@ -288,5 +293,46 @@ class Job
     public function getExpire()
     {
         return $this->expire;
+    }
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->candidats = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
+     * Add candidat
+     *
+     * @param \Zephyr\UserBundle\Entity\User $candidat
+     *
+     * @return Job
+     */
+    public function addCandidat(\Zephyr\UserBundle\Entity\User $candidat)
+    {
+        $this->candidats[] = $candidat;
+
+        return $this;
+    }
+
+    /**
+     * Remove candidat
+     *
+     * @param \Zephyr\UserBundle\Entity\User $candidat
+     */
+    public function removeCandidat(\Zephyr\UserBundle\Entity\User $candidat)
+    {
+        $this->candidats->removeElement($candidat);
+    }
+
+    /**
+     * Get candidats
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCandidats()
+    {
+        return $this->candidats;
     }
 }

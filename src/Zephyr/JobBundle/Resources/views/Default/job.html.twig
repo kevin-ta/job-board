@@ -1,0 +1,31 @@
+{% extends '::base.html.twig' %}  
+
+{% block body %}
+	{% if error is defined %}
+		<div class="alert alert-dismissible alert-danger">
+	  		<button type="button" class="close" data-dismiss="alert">×</button>
+	  		<p>{{ error }}</p>
+		</div>
+	{% endif %}
+	{% if success is defined %}
+		<div class="alert alert-dismissible alert-success">
+	  		<button type="button" class="close" data-dismiss="alert">×</button>
+	  		<p>{{ success }}</p>
+		</div>
+	{% endif %}
+	<div class="row">
+		<div class="col-md-10 col-md-offset-1">
+			<div class="jobs">
+				<div class="ticket">
+					<br>
+					<h3><b>{{ job.title }}</b></h3>
+					<h4>{{ job.category }}</h4><br>
+					<p>{{ job.content }}</p><br><br>
+					<form method="post">
+						<button type="submit" class="btn btn-default">Je postule</button><br><br><br>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+{% endblock %}

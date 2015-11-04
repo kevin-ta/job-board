@@ -1,3 +1,7 @@
 zephyr_job_homepage:
     path:     /
     defaults: { _controller: ZephyrJobBundle:Default:index }
+
+zephyr_job_job:
+    path:     /job/{id}
+    defaults: { _controller: ZephyrJobBundle:Default:job }

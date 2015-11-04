@@ -123,6 +123,12 @@ a:hover
     -webkit-transition:-webkit-transform .15s linear;
 }
 
+.jobs .ticket
+{
+    background-color:rgba(111,145,157,0.5);
+    width:100%;
+}
+
 .jobs p
 {
     opacity:1;
