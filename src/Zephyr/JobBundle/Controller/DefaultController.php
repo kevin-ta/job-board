@@ -107,10 +107,15 @@ class DefaultController extends Controller
             }
 
             $job->setOwner($user);
+            $job->setValid(0);
+            $job->setDone(0);
+            $job->setExpire(0);
+            $job->setDate(new \DateTime());
             $em->persist($job);
             $em->flush();
 
             return $this->render('ZephyrJobBundle:Default:create.html.twig', array(
+                'form' => $form->createView(),
                 'success' => 'Votre demande va être étudiée par notre équipe Jobs.',
                 'job' => $job,
             ));

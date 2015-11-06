@@ -30,6 +30,11 @@ class User extends BaseUser
     private $lastname;
 
     /**
+     * @ORM\Column(type="string", length=10)
+     */
+    private $number;
+
+    /**
      * @ORM\ManyToMany(targetEntity="Zephyr\JobBundle\Entity\Job", mappedBy="candidats")
      */
     private $jobs;
@@ -119,5 +124,29 @@ class User extends BaseUser
     public function getJobs()
     {
         return $this->jobs;
+    }
+
+    /**
+     * Set number
+     *
+     * @param integer $number
+     *
+     * @return User
+     */
+    public function setNumber($number)
+    {
+        $this->number = $number;
+
+        return $this;
+    }
+
+    /**
+     * Get number
+     *
+     * @return integer
+     */
+    public function getNumber()
+    {
+        return $this->number;
     }
 }

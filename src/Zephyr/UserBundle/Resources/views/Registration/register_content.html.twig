@@ -1,10 +1,54 @@
-<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
-    {{ form_widget(form) }}
-    {{ form_rest(form) }}
-	</br>
-    <div class="form-group">
-      	<div class="col-lg-10">
-        	<input type="submit" id="_submit" name="_submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" class="btn btn-default" />
-        </div>
-    </div>
-</form>
+<div style="padding-top:50px;">
+	<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register form-horizontal">
+		{{ form_widget(form._token) }}
+	    <div class="form-group">
+	      	<label for="username" class="col-lg-2 control-label">Utilisateur</label>
+	      	<div class="col-lg-8">
+	        	{{ form_widget(form.username, {'attr': {'class': 'form-control'}}) }}
+	      	</div>
+	    </div>
+	    <div class="form-group">
+	      	<label for="username" class="col-lg-2 control-label">Email</label>
+	      	<div class="col-lg-8">
+	        	{{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+	      	</div>
+	    </div>
+	    <div class="form-group">
+	      	<label for="password" class="col-lg-2 control-label">Mot de passe</label>
+	      	<div class="col-lg-8">
+				{{ form_widget(form.plainPassword.first, {'attr': {'class': 'form-control'}}) }}
+			</div>
+	    </div>
+	    <div class="form-group">
+	      	<label for="password" class="col-lg-2 control-label">Répétez</label>
+	      	<div class="col-lg-8">
+				{{ form_widget(form.plainPassword.second, {'attr': {'class': 'form-control'}}) }}
+			</div>
+	    </div>
+	    <br>
+	    <div class="form-group">
+	      	<label for="username" class="col-lg-2 control-label">Nom</label>
+	      	<div class="col-lg-8">
+	        	{{ form_widget(form.lastname, {'attr': {'class': 'form-control'}}) }}
+	      	</div>
+	    </div>
+	    <div class="form-group">
+	      	<label for="username" class="col-lg-2 control-label">Prénom</label>
+	      	<div class="col-lg-8">
+	        	{{ form_widget(form.firstname, {'attr': {'class': 'form-control'}}) }}
+	      	</div>
+	    </div>
+	    <div class="form-group">
+	      	<label for="username" class="col-lg-2 control-label">Numéro de téléphone</label>
+	      	<div class="col-lg-8">
+	        	{{ form_widget(form.number, {'attr': {'class': 'form-control'}}) }}
+	      	</div>
+	    </div>
+	    <br>
+	    <div class="form-group">
+	      	<div class="col-lg-8 col-lg-offset-2">
+	      		<input class="btn btn-default" type="submit" value="{{ 'registration.submit'|trans({}, 'FOSUserBundle') }}" />
+	      	</div>
+	    </div>
+	</form>
+</div>
