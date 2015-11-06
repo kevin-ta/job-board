@@ -87,3 +87,13 @@ fos_user:
     registration:
         form:
             type: app_user_registration
+
+ivory_ck_editor:
+    default_config: config_full
+    configs:
+        config_full:
+            toolbar: full
+        config_standard:
+            toolbar: standard
+        config_basic:
+            toolbar: basic

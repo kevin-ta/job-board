@@ -20,6 +20,7 @@ class AppKernel extends Kernel
             new Zephyr\UserBundle\ZephyrUserBundle(),
             new FOS\UserBundle\FOSUserBundle(),
             new Zephyr\JobBundle\ZephyrJobBundle(),
+            new Ivory\CKEditorBundle\IvoryCKEditorBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {
