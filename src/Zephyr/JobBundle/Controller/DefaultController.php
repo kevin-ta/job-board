@@ -126,4 +126,47 @@ class DefaultController extends Controller
             'form' => $form->createView(),
         ));
     }
+
+    public function editAction($id, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $um = $this->get('fos_user.user_manager');
+        $job = $em->getRepository('ZephyrJobBundle:Job')->findOneById($id);
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if($job == null || $user != $job->getOwner() || $job->getDone() != null || $job->getExpire() != null)
+        {
+            return $this->redirectToRoute('zephyr_job_homepage');
+        }
+
+        $form = $this->createForm(new JobType($em), $job);
+
+        if($request->isMethod('POST'))
+        {
+
+            $form->handleRequest($request);
+
+            if(! $form->isValid())
+            {
+                return $this->render('ZephyrJobBundle:Default:edit.html.twig', array(
+                    'error' => 'Erreur dans le formulaire.',
+                    'job' => $job,
+                ));
+            }
+
+            $em->persist($job);
+            $em->flush();
+
+            return $this->render('ZephyrJobBundle:Default:edit.html.twig', array(
+                'form' => $form->createView(),
+                'success' => 'Votre annonce a été éditée.',
+                'job' => $job,
+            ));
+        }
+
+        return $this->render('ZephyrJobBundle:Default:edit.html.twig', array(
+            'form' => $form->createView(),
+            'job' => $job,
+        ));
+    }
 }
