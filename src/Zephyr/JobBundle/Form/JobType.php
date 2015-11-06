@@ -22,9 +22,13 @@ class JobType extends AbstractType
             ->add('short_content', 'text', array(
                     'attr' => array('placeholder' => 'Pas plus de 20 mots'),
                     'label' => 'Aperçu'))
-            ->add('content', 'textarea', array(
-                    'attr' => array('style' => 'height: 200px'),
-                    'label' => "Texte de l'annonce"))
+            ->add('content', 'ckeditor', array(
+                    'label' => "Contenu de l'annonce",
+                    'config' => array(
+                        'uiColor' => '#ffffff',
+                    )
+                )
+            )
         ;
     }
 
