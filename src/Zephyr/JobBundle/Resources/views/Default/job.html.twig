@@ -20,7 +20,7 @@
 					<br>
 					<h3><b>{{ job.title }}</b></h3>
 					<h4>{{ job.category }}</h4><br>
-					<p>{{ job.content }}</p><br><br>
+					<p>{{ job.content|raw }}</p><br><br>
 					<form method="post">
 						<button type="submit" class="btn btn-default">Je postule</button><br><br><br>
 					</form>
