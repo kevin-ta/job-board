@@ -34,8 +34,11 @@
                             <li><a href="{{ path('fos_user_registration_register') }}">S'INSCRIRE</a></li>
                             <li><a href="{{ path('fos_user_security_login') }}">CONNEXION</a></li>
                         {% else %}
-                            <li><a href="{{ path('fos_user_profile_show') }}">MES ANNONCES</a></li>
-                            <li><a href="{{ path('fos_user_security_logout') }}">DECONNEXION</a></li>
+                            {% if is_granted('ROLE_SUPER_ADMIN') %}
+                                <li><a href="{{ path('zephyr_admin') }}">ADMIN</a></li>
+                            {% endif %}
+                                <li><a href="{{ path('fos_user_profile_show') }}">MES ANNONCES</a></li>
+                                <li><a href="{{ path('fos_user_security_logout') }}">DECONNEXION</a></li>
                         {% endif %}
                     </ul>
                 </div>
