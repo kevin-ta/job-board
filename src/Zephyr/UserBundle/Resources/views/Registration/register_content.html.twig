@@ -1,6 +1,5 @@
 <div style="padding-top:50px;">
 	<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register form-horizontal">
-		{{ form_widget(form._token) }}
 	    <div class="form-group">
 	      	<label for="username" class="col-lg-2 control-label">Utilisateur</label>
 	      	<div class="col-lg-8">
@@ -44,6 +43,7 @@
 	        	{{ form_widget(form.number, {'attr': {'class': 'form-control'}}) }}
 	      	</div>
 	    </div>
+	    {{ form_rest(form) }}
 	    <br>
 	    <div class="form-group">
 	      	<div class="col-lg-8 col-lg-offset-2">
