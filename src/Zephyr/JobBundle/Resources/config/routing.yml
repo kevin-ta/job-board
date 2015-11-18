@@ -6,6 +6,10 @@ zephyr_job_job:
     path:     /job/{id}
     defaults: { _controller: ZephyrJobBundle:Default:job }
 
+zephyr_job_apply:
+    path:     /apply/{id}
+    defaults: { _controller: ZephyrJobBundle:Default:apply }
+
 zephyr_job_create:
     path:     /create
     defaults: { _controller: ZephyrJobBundle:Default:create }

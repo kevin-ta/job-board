@@ -52,36 +52,54 @@ class DefaultController extends Controller
 
         if($request->isMethod('POST'))
         {
-            if($user == $owner)
-            {
-                return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
-                    'error' => 'Vous ne pouvez pas postuler à une annonce que vous avez créée.',
-                    'job' => $job,
-                ));
-            }
-            
-            for($i = 0; $i < count($list); $i++)
-            {
-                if($user == $list[$i])
-                {
-                    return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
-                        'error' => 'Vous avez déjà postulé à ce job.',
-                        'job' => $job,
-                    ));
-                }
-            }
-
-            $job->AddCandidat($user);
-            $em->persist($job);
-            $em->flush();
-
-            return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
-                'success' => 'Votre demande va être étudiée par notre équipe Jobs.',
-                'job' => $job,
-            ));
+            return $this->redirectToRoute('zephyr_job_apply', array('id' => $id));
         }
 
         return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
+            'job' => $job,
+        ));
+    }
+
+    public function applyAction($id, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $um = $this->get('fos_user.user_manager');
+        $job = $em->getRepository('ZephyrJobBundle:Job')->findOneById($id);
+        $user = $this->get('security.context')->getToken()->getUser();
+
+        if($job == null || $job->getValid() == null || $job->getDone() != null || $job->getExpire() != null)
+        {
+            return $this->redirectToRoute('zephyr_job_homepage');
+        }
+
+        $owner = $job->getOwner();
+        $list = $job->getCandidats();
+
+        if($user == $owner)
+        {
+            return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
+                'error' => 'Vous ne pouvez pas postuler à une annonce que vous avez créée.',
+                'job' => $job,
+            ));
+        }
+        
+        for($i = 0; $i < count($list); $i++)
+        {
+            if($user == $list[$i])
+            {
+                return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
+                    'error' => 'Vous avez déjà postulé à ce job.',
+                    'job' => $job,
+                ));
+            }
+        }
+
+        $job->AddCandidat($user);
+        $em->persist($job);
+        $em->flush();
+
+        return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
+            'success' => 'Votre demande va être étudiée par notre équipe Jobs.',
             'job' => $job,
         ));
     }

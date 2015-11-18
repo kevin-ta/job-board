@@ -46,5 +46,5 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/admin, role: ROLE_SUPER_ADMIN }
         - { path: ^/user, role: ROLE_ADMIN }
-        - { path: ^/job, role: ROLE_USER }
+        - { path: ^/apply, role: ROLE_USER }
         - { path: ^/create, role: ROLE_USER }
