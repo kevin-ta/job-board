@@ -44,23 +44,43 @@ class DefaultController extends Controller
 
             if(! $form->isValid())
             {
-                return $this->render('ZephyrUserBundle:Default:edit.html.twig', array(
+                return $this->render('ZephyrJobBundle:Default:edit.html.twig', array(
                     'error' => 'Erreur dans le formulaire.',
                     'job' => $job,
                 ));
             }
 
+            $checkbox = $request->request->get('checkbox');
+            $job->setValid(0);
+            $job->setExpire(0);
+            $job->setDone(0);
+
+            foreach($checkbox as $value)
+            {
+                if($value == 'valid')
+                {
+                    $job->setValid(1);
+                }
+                elseif($value == 'expire')
+                {
+                    $job->setExpire(1);
+                }
+                elseif($value == 'done')
+                {
+                    $job->setDone(1);
+                }
+            }
+
             $em->persist($job);
             $em->flush();
 
-            return $this->render('ZephyrUserBundle:Default:edit.html.twig', array(
-                'form' => $form->createView(),
+            return $this->render('ZephyrUserBundle:Default:admin.html.twig', array(
                 'success' => 'Votre annonce a été éditée.',
                 'job' => $job,
             ));
         }
 
-        return $this->render('ZephyrUserBundle:Default:edit.html.twig', array(
+        return $this->render('ZephyrJobBundle:Default:edit.html.twig', array(
             'form' => $form->createView(),
             'job' => $job,
         ));

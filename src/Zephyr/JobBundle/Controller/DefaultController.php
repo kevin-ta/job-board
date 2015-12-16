@@ -74,6 +74,16 @@ class DefaultController extends Controller
 
         $owner = $job->getOwner();
         $list = $job->getCandidats();
+        $foo = explode('@', $user->getEmail());
+        $mail = $foo[1];
+
+        if($mail != 'edu.esiee.fr')
+        {
+            return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
+                'error' => "Seuls les élèves de l'ESIEE (inscrits avec une adresse @edu.esiee.fr) ont le droit de postuler aux jobs.",
+                'job' => $job,
+            ));  
+        }
 
         if($user == $owner)
         {
@@ -109,6 +119,20 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $um = $this->get('fos_user.user_manager');
         $user = $this->get('security.context')->getToken()->getUser();
+        $foo = explode('@', $user->getEmail());
+        $mail = $foo[1];
+        $superadmin = $this->get('security.context')->getToken()->getRoles();
+
+        if($mail == 'edu.esiee.fr')
+        {
+            if($superadmin[0] != 'ROLE_SUPER_ADMIN')
+            {
+                return $this->redirectToRoute('zephyr_job_homepage', array(
+                    'error' => "Seuls les personnes de l'extérieur peuvent poster des jobs.",
+                )); 
+            }
+        }
+
         $job = new Job();
         $form = $this->createForm(new JobType($em), $job);
 
@@ -124,18 +148,85 @@ class DefaultController extends Controller
                 ));
             }
 
-            $job->setOwner($user);
+            $checkbox = $request->request->get('checkbox');
             $job->setValid(0);
-            $job->setDone(0);
             $job->setExpire(0);
+            $job->setDone(0);
+
+            if($superadmin[0] == 'ROLE_SUPER_ADMIN')
+            {
+                foreach($checkbox as $value)
+                {
+                    if($value == 'valid')
+                    {
+                        $job->setValid(1);
+                    }
+                    elseif($value == 'expire')
+                    {
+                        $job->setExpire(1);
+                    }
+                    elseif($value == 'done')
+                    {
+                        $job->setDone(1);
+                    }
+                }
+            }
+
+            $job->setOwner($user);
             $job->setDate(new \DateTime());
             $em->persist($job);
             $em->flush();
 
-            return $this->render('ZephyrJobBundle:Default:create.html.twig', array(
-                'form' => $form->createView(),
+            if($superadmin[0] != 'ROLE_SUPER_ADMIN')
+            {
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('[Team Jobs] Nouvelle annonce disponible')
+                    ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+                    ->setTo(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+                    ->setCC(array(
+                        'alizee.perrin@edu.esiee.fr' => "Alizée PERRIN",
+                        'sarah.arnedoslopez@edu.esiee.fr' => "Sarah ARNEDOS LOPEZ"
+                        ))
+                    ->setBody(
+                        $this->renderView(
+                            'ZephyrCoursBundle:Email:email.html.twig',
+                            array(
+                                'name' => 'la Team Jobs',
+                                'objet' => "Une annonce vient d'arriver sur la plateforme Job. Vous êtes priés de bien vouloir y jeter un coup d'oeil.",
+                                'job' => $job->getId(),
+                                'lien' => 'https://bde.esiee.fr/job-board/admin/edit/'.$job->getId()
+                            )
+                        )
+                    );
+                $this->get('mailer')->send($message);
+            }
+            else
+            {
+                $message = \Swift_Message::newInstance()
+                    ->setSubject('[Team Jobs] Confirmation')
+                    ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+                    ->setTo(array($job->getOwner()->getEmail()) => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname())
+                    ->setCC(array(
+                        'alizee.perrin@edu.esiee.fr' => "Alizée PERRIN",
+                        'sarah.arnedoslopez@edu.esiee.fr' => "Sarah ARNEDOS LOPEZ"
+                        ))
+                    ->setBody(
+                        $this->renderView(
+                            'ZephyrCoursBundle:Email:email.html.twig',
+                            array(
+                                'name' => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname(),
+                                'objet' => "Nous avons bien reçu votre annonce, nous allons la traiter sous peu.",
+                                'job' => $job->getId(),
+                                'lien' => 'https://bde.esiee.fr/job-board/job/'.$job->getId()
+                            )
+                        )
+                    );
+                $this->get('mailer')->send($message);
+            }
+
+            return $this->redirectToRoute('zephyr_job_homepage', array(
+                'id' => $job->getId(),
                 'success' => 'Votre demande va être étudiée par notre équipe Jobs.',
-                'job' => $job,
             ));
         }
 
@@ -161,7 +252,6 @@ class DefaultController extends Controller
 
         if($request->isMethod('POST'))
         {
-
             $form->handleRequest($request);
 
             if(! $form->isValid())
@@ -175,10 +265,17 @@ class DefaultController extends Controller
             $em->persist($job);
             $em->flush();
 
-            return $this->render('ZephyrJobBundle:Default:edit.html.twig', array(
-                'form' => $form->createView(),
+            if($job->getValid() == 1)
+            {
+                return $this->redirectToRoute('zephyr_job_job', array(
+                    'id' => $job->getId(),
+                    'success' => 'Votre annonce a été éditée.',
+                ));
+            }
+
+            return $this->redirectToRoute('zephyr_job_homepage', array(
+                'id' => $job->getId(),
                 'success' => 'Votre annonce a été éditée.',
-                'job' => $job,
             ));
         }
 
