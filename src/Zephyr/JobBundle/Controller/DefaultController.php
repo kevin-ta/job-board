@@ -205,11 +205,8 @@ class DefaultController extends Controller
                 $message = \Swift_Message::newInstance()
                     ->setSubject('[Team Jobs] Confirmation')
                     ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
-                    ->setTo(array($job->getOwner()->getEmail()) => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname())
-                    ->setCC(array(
-                        'alizee.perrin@edu.esiee.fr' => "Alizée PERRIN",
-                        'sarah.arnedoslopez@edu.esiee.fr' => "Sarah ARNEDOS LOPEZ"
-                        ))
+                    ->setTo(array($job->getOwner()->getEmail() => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname()))
+                    ->setCC(array('alizee.perrin@edu.esiee.fr', 'sarah.arnedoslopez@edu.esiee.fr'))
                     ->setBody(
                         $this->renderView(
                             'ZephyrCoursBundle:Email:email.html.twig',
