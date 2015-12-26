@@ -52,64 +52,82 @@ class DefaultController extends Controller
 
         if($request->isMethod('POST'))
         {
-            return $this->redirectToRoute('zephyr_job_apply', array('id' => $id));
-        }
+            $em = $this->getDoctrine()->getManager();
+            $um = $this->get('fos_user.user_manager');
+            $job = $em->getRepository('ZephyrJobBundle:Job')->findOneById($id);
+            $user = $this->get('security.context')->getToken()->getUser();
 
-        return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
-            'job' => $job,
-        ));
-    }
+            if($job == null || $job->getValid() == null || $job->getDone() != null || $job->getExpire() != null)
+            {
+                return $this->redirectToRoute('zephyr_job_homepage');
+            }
 
-    public function applyAction($id, Request $request)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $um = $this->get('fos_user.user_manager');
-        $job = $em->getRepository('ZephyrJobBundle:Job')->findOneById($id);
-        $user = $this->get('security.context')->getToken()->getUser();
+            $owner = $job->getOwner();
+            $list = $job->getCandidats();
+            $foo = explode('@', $user->getEmail());
+            $mail = $foo[1];
+            $this->get('request')->request->get('cv');
 
-        if($job == null || $job->getValid() == null || $job->getDone() != null || $job->getExpire() != null)
-        {
-            return $this->redirectToRoute('zephyr_job_homepage');
-        }
-
-        $owner = $job->getOwner();
-        $list = $job->getCandidats();
-        $foo = explode('@', $user->getEmail());
-        $mail = $foo[1];
-
-        if($mail != 'edu.esiee.fr')
-        {
-            return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
-                'error' => "Seuls les élèves de l'ESIEE (inscrits avec une adresse @edu.esiee.fr) ont le droit de postuler aux jobs.",
-                'job' => $job,
-            ));  
-        }
-
-        if($user == $owner)
-        {
-            return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
-                'error' => 'Vous ne pouvez pas postuler à une annonce que vous avez créée.',
-                'job' => $job,
-            ));
-        }
-        
-        for($i = 0; $i < count($list); $i++)
-        {
-            if($user == $list[$i])
+            if($mail != 'edu.esiee.fr')
             {
                 return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
-                    'error' => 'Vous avez déjà postulé à ce job.',
+                    'error' => "Seuls les élèves de l'ESIEE (inscrits avec une adresse @edu.esiee.fr) ont le droit de postuler aux jobs.",
+                    'job' => $job,
+                ));  
+            }
+
+            if($user == $owner)
+            {
+                return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
+                    'error' => 'Vous ne pouvez pas postuler à une annonce que vous avez créée.',
                     'job' => $job,
                 ));
             }
+            
+            for($i = 0; $i < count($list); $i++)
+            {
+                if($user == $list[$i])
+                {
+                    return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
+                        'error' => 'Vous avez déjà postulé à ce job.',
+                        'job' => $job,
+                    ));
+                }
+            }
+
+            $job->AddCandidat($user);
+            $em->persist($job);
+            $em->flush();
+
+            $message = \Swift_Message::newInstance()
+                    ->setSubject('[Team Jobs] Confirmation')
+                    ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+                    ->setTo(array($job->getOwner()->getEmail() => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname()))
+                    ->setCC(array(
+                        'alizee.perrin@edu.esiee.fr',
+                        'sarah.arnedoslopez@edu.esiee.fr'
+                        ))
+                    ->setBody(
+                        $this->renderView(
+                            'ZephyrCoursBundle:Email:email.html.twig',
+                            array(
+                                'name' => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname(),
+                                'objet' => "Vous avez récemment postulé à un job, nous allons traiter votre demande sous peu.",
+                                'job' => $job->getId(),
+                                'lien' => 'https://bde.esiee.fr/job-board/job/'.$job->getId(),
+                                'cv' => $request->request->get('cv')
+                            )
+                        )
+                    );
+                $this->get('mailer')->send($message);
+
+            return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
+                'success' => 'Votre demande va être étudiée par notre équipe Jobs.',
+                'job' => $job,
+            ));
         }
 
-        $job->AddCandidat($user);
-        $em->persist($job);
-        $em->flush();
-
         return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
-            'success' => 'Votre demande va être étudiée par notre équipe Jobs.',
             'job' => $job,
         ));
     }
@@ -177,49 +195,47 @@ class DefaultController extends Controller
             $em->persist($job);
             $em->flush();
 
-            if($superadmin[0] != 'ROLE_SUPER_ADMIN')
-            {
-                $message = \Swift_Message::newInstance()
-                    ->setSubject('[Team Jobs] Nouvelle annonce disponible')
-                    ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
-                    ->setTo(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
-                    ->setCC(array(
-                        'alizee.perrin@edu.esiee.fr' => "Alizée PERRIN",
-                        'sarah.arnedoslopez@edu.esiee.fr' => "Sarah ARNEDOS LOPEZ"
-                        ))
-                    ->setBody(
-                        $this->renderView(
-                            'ZephyrCoursBundle:Email:email.html.twig',
-                            array(
-                                'name' => 'la Team Jobs',
-                                'objet' => "Une annonce vient d'arriver sur la plateforme Job. Vous êtes priés de bien vouloir y jeter un coup d'oeil.",
-                                'job' => $job->getId(),
-                                'lien' => 'https://bde.esiee.fr/job-board/admin/edit/'.$job->getId()
-                            )
+            $message1 = \Swift_Message::newInstance()
+                ->setSubject('[Team Jobs] Nouvelle annonce disponible')
+                ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+                ->setTo(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+                ->setCC(array(
+                    'alizee.perrin@edu.esiee.fr' => "Alizée PERRIN",
+                    'sarah.arnedoslopez@edu.esiee.fr' => "Sarah ARNEDOS LOPEZ"
+                    ))
+                ->setBody(
+                    $this->renderView(
+                        'ZephyrCoursBundle:Email:email.html.twig',
+                        array(
+                            'name' => 'la Team Jobs',
+                            'objet' => "Une annonce vient d'arriver sur la plateforme Job. Vous êtes priés de bien vouloir y jeter un coup d'oeil.",
+                            'job' => $job->getId(),
+                            'lien' => 'https://bde.esiee.fr/job-board/admin/edit/'.$job->getId()
                         )
-                    );
-                $this->get('mailer')->send($message);
-            }
-            else
-            {
-                $message = \Swift_Message::newInstance()
-                    ->setSubject('[Team Jobs] Confirmation')
-                    ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
-                    ->setTo(array($job->getOwner()->getEmail() => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname()))
-                    ->setCC(array('alizee.perrin@edu.esiee.fr', 'sarah.arnedoslopez@edu.esiee.fr'))
-                    ->setBody(
-                        $this->renderView(
-                            'ZephyrCoursBundle:Email:email.html.twig',
-                            array(
-                                'name' => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname(),
-                                'objet' => "Nous avons bien reçu votre annonce, nous allons la traiter sous peu.",
-                                'job' => $job->getId(),
-                                'lien' => 'https://bde.esiee.fr/job-board/job/'.$job->getId()
-                            )
+                    )
+                );
+            $this->get('mailer')->send($message1);
+
+            $message2 = \Swift_Message::newInstance()
+                ->setSubject('[Team Jobs] Confirmation')
+                ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+                ->setTo(array($job->getOwner()->getEmail() => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname()))
+                ->setCC(array(
+                    'alizee.perrin@edu.esiee.fr',
+                    'sarah.arnedoslopez@edu.esiee.fr'
+                    ))
+                ->setBody(
+                    $this->renderView(
+                        'ZephyrCoursBundle:Email:email.html.twig',
+                        array(
+                            'name' => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname(),
+                            'objet' => "Nous avons bien reçu votre annonce, nous allons la traiter sous peu.",
+                            'job' => $job->getId(),
+                            'lien' => 'https://bde.esiee.fr/job-board/job/'.$job->getId()
                         )
-                    );
-                $this->get('mailer')->send($message);
-            }
+                    )
+                );
+            $this->get('mailer')->send($message2);
 
             return $this->redirectToRoute('zephyr_job_homepage', array(
                 'id' => $job->getId(),
@@ -240,7 +256,7 @@ class DefaultController extends Controller
         $job = $em->getRepository('ZephyrJobBundle:Job')->findOneById($id);
         $user = $this->get('security.context')->getToken()->getUser();
 
-        if($job == null || $user != $job->getOwner() || $job->getDone() != null || $job->getExpire() != null)
+        if($job == null || $user != $job->getOwner())
         {
             return $this->redirectToRoute('zephyr_job_homepage');
         }
@@ -264,11 +280,53 @@ class DefaultController extends Controller
 
             if($job->getValid() == 1)
             {
+                $message = \Swift_Message::newInstance()
+                ->setSubject('[Team Jobs] Annonce modifiée')
+                ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+                ->setTo(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+                ->setCC(array(
+                    'alizee.perrin@edu.esiee.fr' => "Alizée PERRIN",
+                    'sarah.arnedoslopez@edu.esiee.fr' => "Sarah ARNEDOS LOPEZ"
+                    ))
+                ->setBody(
+                    $this->renderView(
+                        'ZephyrCoursBundle:Email:email.html.twig',
+                        array(
+                            'name' => 'la Team Jobs',
+                            'objet' => "Une annonce vient d'être modifié sur la plateforme Job.",
+                            'job' => $job->getId(),
+                            'lien' => 'https://bde.esiee.fr/job-board/admin/edit/'.$job->getId()
+                        )
+                    )
+                );
+                $this->get('mailer')->send($message);
+
                 return $this->redirectToRoute('zephyr_job_job', array(
                     'id' => $job->getId(),
                     'success' => 'Votre annonce a été éditée.',
                 ));
             }
+
+            $message = \Swift_Message::newInstance()
+                ->setSubject('[Team Jobs] Nouvelle annonce disponible')
+                ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+                ->setTo(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
+                ->setCC(array(
+                    'alizee.perrin@edu.esiee.fr' => "Alizée PERRIN",
+                    'sarah.arnedoslopez@edu.esiee.fr' => "Sarah ARNEDOS LOPEZ"
+                    ))
+                ->setBody(
+                    $this->renderView(
+                        'ZephyrCoursBundle:Email:email.html.twig',
+                        array(
+                            'name' => 'la Team Jobs',
+                            'objet' => "Une annonce vient d'être modifié sur la plateforme Job.",
+                            'job' => $job->getId(),
+                            'lien' => 'https://bde.esiee.fr/job-board/admin/edit/'.$job->getId()
+                        )
+                    )
+                );
+            $this->get('mailer')->send($message);
 
             return $this->redirectToRoute('zephyr_job_homepage', array(
                 'id' => $job->getId(),
