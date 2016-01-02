@@ -55,24 +55,29 @@ class DefaultController extends Controller
             $job->setExpire(0);
             $job->setDone(0);
 
-            foreach($checkbox as $value)
+            if($checkbox != null)
             {
-                if($value == 'valid')
+                foreach($checkbox as $value)
                 {
-                    $job->setValid(1);
-                }
-                elseif($value == 'expire')
-                {
-                    $job->setExpire(1);
-                }
-                elseif($value == 'done')
-                {
-                    $job->setDone(1);
+                    if($value == 'valid')
+                    {
+                        $job->setValid(1);
+                    }
+                    elseif($value == 'expire')
+                    {
+                        $job->setExpire(1);
+                    }
+                    elseif($value == 'done')
+                    {
+                        $job->setDone(1);
+                    }
                 }
             }
 
             $em->persist($job);
             $em->flush();
+
+            $job = $em->getRepository('ZephyrJobBundle:Job')->findAll();
 
             return $this->render('ZephyrUserBundle:Default:admin.html.twig', array(
                 'success' => 'Votre annonce a été éditée.',

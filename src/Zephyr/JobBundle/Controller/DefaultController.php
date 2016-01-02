@@ -173,19 +173,22 @@ class DefaultController extends Controller
 
             if($superadmin[0] == 'ROLE_SUPER_ADMIN')
             {
-                foreach($checkbox as $value)
+                if($checkbox != null)
                 {
-                    if($value == 'valid')
+                    foreach($checkbox as $value)
                     {
-                        $job->setValid(1);
-                    }
-                    elseif($value == 'expire')
-                    {
-                        $job->setExpire(1);
-                    }
-                    elseif($value == 'done')
-                    {
-                        $job->setDone(1);
+                        if($value == 'valid')
+                        {
+                            $job->setValid(1);
+                        }
+                        elseif($value == 'expire')
+                        {
+                            $job->setExpire(1);
+                        }
+                        elseif($value == 'done')
+                        {
+                            $job->setDone(1);
+                        }
                     }
                 }
             }
