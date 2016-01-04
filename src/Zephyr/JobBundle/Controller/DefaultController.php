@@ -104,8 +104,9 @@ class DefaultController extends Controller
                     ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
                     ->setTo(array($job->getOwner()->getEmail() => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname()))
                     ->setCC(array(
-                        'alizee.perrin@edu.esiee.fr',
-                        'sarah.arnedoslopez@edu.esiee.fr'
+                        //'alizee.perrin@edu.esiee.fr',
+                        //'sarah.arnedoslopez@edu.esiee.fr'
+                        'kevin.ta@edu.esiee.fr'
                         ))
                     ->setBody(
                         $this->renderView(
@@ -288,9 +289,10 @@ class DefaultController extends Controller
                 ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
                 ->setTo(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
                 ->setCC(array(
-                    'alizee.perrin@edu.esiee.fr' => "Alizée PERRIN",
-                    'sarah.arnedoslopez@edu.esiee.fr' => "Sarah ARNEDOS LOPEZ"
-                    ))
+                    //'alizee.perrin@edu.esiee.fr',
+                    //'sarah.arnedoslopez@edu.esiee.fr'
+                    'kevin.ta@edu.esiee.fr'
+                ))
                 ->setBody(
                     $this->renderView(
                         'ZephyrCoursBundle:Email:email.html.twig',
@@ -315,9 +317,10 @@ class DefaultController extends Controller
                 ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
                 ->setTo(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
                 ->setCC(array(
-                    'alizee.perrin@edu.esiee.fr' => "Alizée PERRIN",
-                    'sarah.arnedoslopez@edu.esiee.fr' => "Sarah ARNEDOS LOPEZ"
-                    ))
+                    //'alizee.perrin@edu.esiee.fr',
+                    //'sarah.arnedoslopez@edu.esiee.fr'
+                    'kevin.ta@edu.esiee.fr'
+                ))
                 ->setBody(
                     $this->renderView(
                         'ZephyrCoursBundle:Email:email.html.twig',
