@@ -213,7 +213,7 @@ class DefaultController extends Controller
                         'ZephyrJobBundle:Email:email.html.twig',
                         array(
                             'name' => 'la Team Jobs',
-                            'objet' => "Une annonce vient d'arriver sur la plateforme Job. Vous êtes priés de bien vouloir y jeter un coup d'oeil.",
+                            'objet' => 'Une annonce est arrivée sur la plateforme Job. Vous êtes priés de bien vouloir y jeter un oeil.',
                             'job' => $job->getId(),
                             'lien' => 'https://bde.esiee.fr/job-board/admin/edit/'.$job->getId()
                         )
