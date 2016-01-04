@@ -110,7 +110,7 @@ class DefaultController extends Controller
                         ))
                     ->setBody(
                         $this->renderView(
-                            'ZephyrCoursBundle:Email:email.html.twig',
+                            'ZephyrJobBundle:Email:email.html.twig',
                             array(
                                 'name' => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname(),
                                 'objet' => "Vous avez récemment postulé à un job, nous allons traiter votre demande sous peu.",
@@ -204,12 +204,13 @@ class DefaultController extends Controller
                 ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
                 ->setTo(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
                 ->setCC(array(
-                    'alizee.perrin@edu.esiee.fr' => "Alizée PERRIN",
-                    'sarah.arnedoslopez@edu.esiee.fr' => "Sarah ARNEDOS LOPEZ"
-                    ))
+                    //'alizee.perrin@edu.esiee.fr',
+                    //'sarah.arnedoslopez@edu.esiee.fr'
+                    'kevin.ta@edu.esiee.fr'
+                ))
                 ->setBody(
                     $this->renderView(
-                        'ZephyrCoursBundle:Email:email.html.twig',
+                        'ZephyrJobBundle:Email:email.html.twig',
                         array(
                             'name' => 'la Team Jobs',
                             'objet' => "Une annonce vient d'arriver sur la plateforme Job. Vous êtes priés de bien vouloir y jeter un coup d'oeil.",
@@ -225,12 +226,13 @@ class DefaultController extends Controller
                 ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
                 ->setTo(array($job->getOwner()->getEmail() => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname()))
                 ->setCC(array(
-                    'alizee.perrin@edu.esiee.fr',
-                    'sarah.arnedoslopez@edu.esiee.fr'
-                    ))
+                    //'alizee.perrin@edu.esiee.fr',
+                    //'sarah.arnedoslopez@edu.esiee.fr'
+                    'kevin.ta@edu.esiee.fr'
+                ))
                 ->setBody(
                     $this->renderView(
-                        'ZephyrCoursBundle:Email:email.html.twig',
+                        'ZephyrJobBundle:Email:email.html.twig',
                         array(
                             'name' => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname(),
                             'objet' => "Nous avons bien reçu votre annonce, nous allons la traiter sous peu.",
@@ -295,7 +297,7 @@ class DefaultController extends Controller
                 ))
                 ->setBody(
                     $this->renderView(
-                        'ZephyrCoursBundle:Email:email.html.twig',
+                        'ZephyrJobBundle:Email:email.html.twig',
                         array(
                             'name' => 'la Team Jobs',
                             'objet' => "Une annonce vient d'être modifié sur la plateforme Job.",
@@ -323,7 +325,7 @@ class DefaultController extends Controller
                 ))
                 ->setBody(
                     $this->renderView(
-                        'ZephyrCoursBundle:Email:email.html.twig',
+                        'ZephyrJobBundle:Email:email.html.twig',
                         array(
                             'name' => 'la Team Jobs',
                             'objet' => "Une annonce vient d'être modifié sur la plateforme Job.",

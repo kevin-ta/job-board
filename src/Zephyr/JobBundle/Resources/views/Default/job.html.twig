@@ -25,11 +25,14 @@
 						<div class="form-group">
 							<div class="col-md-10 col-md-offset-1">
 								<label for="cv">Un petit mot pour montrer ta motivation ?</label>
-								<textarea name="cv" id="cv" class="form-control" rows="4"></textarea><br><br><br>
+								<textarea name="cv" id="cv" class="form-control" rows="4"{% if not app.user %}disabled{% endif %}></textarea><br><br><br>
 							</div>
 						</div>
-						<button type="submit" class="btn btn-default">Je postule</button><br><br><br>
+						<button type="submit" class="btn btn-default" {% if not app.user %}disabled{% endif %}>Je postule</button><br><br><br>
 					</form>
+					{% if not app.user %}
+						<p>Vous devez être connecté pour postuler</p><br><br><br>
+					{% endif %}
 				</div>
 			</div>
 		</div>
