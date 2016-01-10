@@ -32,6 +32,11 @@
 		    		{{ form_label(form.content) }}
 		            {{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
 		  		</div><br>
+	  			<div class="checkbox">
+					<label>
+  						<input type="checkbox" name="checkbox[]" value="done" {% if job.done == 1 %}checked{% endif %}> Fermé
+					</label>
+	  			</div>
 		  		{% if is_granted('ROLE_SUPER_ADMIN') %}
 	  				<div class="checkbox">
     					<label>
@@ -43,15 +48,8 @@
       						<input type="checkbox" name="checkbox[]" value="expire" {% if job.expire == 1 %}checked{% endif %}> Expiré
     					</label>
 		  			</div>
-		  			<div class="checkbox">
-    					<label>
-      						<input type="checkbox" name="checkbox[]" value="done" {% if job.done == 1 %}checked{% endif %}> Fini
-    					</label>
-		  			</div><br>
 		  		{% endif %}
-		  		{% if job.done == 0 or job.expire == 0 %}
-		  			<button type="submit" class="btn btn-default">Modifier votre annonce</button>
-		  		{% endif %}
+		  			<br><button type="submit" class="btn btn-default">Modifier votre annonce</button>
 			</form>
 		</div>
 	</div>

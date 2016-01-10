@@ -21,17 +21,32 @@
 					<h3><b>{{ job.title }}</b></h3>
 					<h4>{{ job.category }}</h4><br>
 					<p>{{ job.content|raw }}</p><br><br>
-					<form method="post">
+					<form method="post" enctype="multipart/form-data">
 						<div class="form-group">
 							<div class="col-md-10 col-md-offset-1">
 								<label for="cv">Un petit mot pour montrer ta motivation ?</label>
-								<textarea name="cv" id="cv" class="form-control" rows="4"{% if not app.user %}disabled{% endif %}></textarea><br><br><br>
+								<textarea name="cv" id="cv" class="form-control" rows="4"{% if not app.user or is_granted('ROLE_EXTERNE') or himself is not null or already is not null %}disabled{% endif %}></textarea><br><br><br>
 							</div>
 						</div>
-						<button type="submit" class="btn btn-default" {% if not app.user %}disabled{% endif %}>Je postule</button><br><br><br>
+						<div class="form-group">
+							<div class="col-md-10 col-md-offset-1">
+								<label for="pdf">Sinon tu peux toujours nous envoyer ton CV sous PDF</label><br><br>
+								<input type="file" id="pdf" name="pdf" {% if not app.user or is_granted('ROLE_EXTERNE') or himself is not null or already is not null %}disabled{% endif %}><br><br><br>
+							</div>
+						</div>
+						<button type="submit" class="btn btn-default" {% if not app.user or is_granted('ROLE_EXTERNE') or himself is not null or already is not null %}disabled{% endif %}>Je postule</button><br><br><br>
 					</form>
 					{% if not app.user %}
 						<p>Vous devez être connecté pour postuler</p><br><br><br>
+					{% endif %}
+					{% if is_granted('ROLE_EXTERNE') %}
+						<p>Seuls les élèves de ESIEE Paris peuvent postuler aux jobs.</p><br><br><br>
+					{% endif %}
+					{% if himself is not null %}
+						<p>{{ himself }}</p><br><br><br>
+					{% endif %}
+					{% if already is not null %}
+						<p>{{ already }}</p><br><br><br>
 					{% endif %}
 				</div>
 			</div>

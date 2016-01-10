@@ -68,6 +68,7 @@ class Job
      * @ORM\ManyToMany(targetEntity="Zephyr\UserBundle\Entity\User", inversedBy="jobs")
      */
     private $candidats;
+
     /**
      * Constructor
      */

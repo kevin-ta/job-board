@@ -29,7 +29,9 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbar">
                     <ul class="nav navbar-nav navbar-right">
-                        <li><a href="{{ path('zephyr_job_create') }}">POSTER UN JOB</a></li>
+                        {% if is_granted('ROLE_EXTERNE') %}
+                            <li><a href="{{ path('zephyr_job_create') }}">POSTER UN JOB</a></li>
+                        {% endif %}
                         {% if app.user is null %}
                             <li><a href="{{ path('fos_user_registration_register') }}">S'INSCRIRE</a></li>
                             <li><a href="{{ path('fos_user_security_login') }}">CONNEXION</a></li>
@@ -44,15 +46,15 @@
                 </div>
             </div>
         </nav>
-
     {% endblock %}
+
         <div class="container">
             {% block body %}{% endblock %}
         </div>
 
-    {% block javascripts %}
         <script src="{{ asset('//code.jquery.com/jquery-2.1.4.min.js') }}"></script>
         <script src="{{ asset('//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js') }}"></script>
+    {% block javascripts %}
     {% endblock %}
     </body>
 </html>

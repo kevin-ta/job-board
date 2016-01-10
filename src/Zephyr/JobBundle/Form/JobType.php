@@ -12,14 +12,17 @@ class JobType extends AbstractType
     {
         $builder
             ->add('title', 'text', array(
+                    'required' => true,
                     'label' => 'Titre'))
             ->add('category', 'entity', array(
                     'class'    => 'ZephyrJobBundle:Category',
                     'choice_label' => 'name',
                     'multiple' => false,
                     'expanded' => false,
+                    'required' => true,
                     'label' => 'Catégorie'))
             ->add('short_content', 'text', array(
+                    'required' => true,
                     'attr' => array('placeholder' => 'Pas plus de 20 mots'),
                     'label' => 'Aperçu'))
             ->add('content', 'ckeditor', array(

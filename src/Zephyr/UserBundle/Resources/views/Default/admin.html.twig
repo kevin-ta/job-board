@@ -19,7 +19,7 @@
 			{% if i.valid != 0 and i.done == 0 and i.expire == 0 %}
 				<div class="col-md-4 col-sm-6">
 					<div class="jobs">
-						<a href="{{ path('zephyr_admin_edit', {id:i.id}) }}">
+						<a href="{{ path('zephyr_job_edit', {id:i.id}) }}">
 							<div id="ticket">
 								<br>
 								<h4><b>{{ i.title }}</b></h4>
@@ -38,7 +38,7 @@
 			{% if j.valid == 0 and j.done == 0 and j.expire == 0 %}
 				<div class="col-md-4 col-sm-6">
 					<div class="jobs">
-						<a href="{{ path('zephyr_admin_edit', {id:j.id}) }}">
+						<a href="{{ path('zephyr_job_edit', {id:j.id}) }}">
 							<div id="ticket">
 								<br>
 								<h4><b>{{ j.title }}</b></h4>
@@ -52,12 +52,12 @@
 		{% endfor %}
 	</div><br><br>
 	<div class="row">
-		<h1>Jobs fermés</h1>
+		<h1>Jobs fermés ou expirés</h1>
 		{% for l in job %}
-			{% if l.done != 0 %}
+			{% if l.done != 0 or l.expire != 0 %}
 				<div class="col-md-4 col-sm-6">
 					<div class="jobs">
-						<a href="{{ path('zephyr_admin_edit', {id:l.id}) }}">
+						<a href="{{ path('zephyr_job_edit', {id:l.id}) }}">
 							<div id="ticket">
 								<br>
 								<h4><b>{{ l.title }}</b></h4>
@@ -70,23 +70,4 @@
 			{% endif %}
 		{% endfor %}
 	</div><br><br>
-	<div class="row">
-		<h1>Jobs expirés</h1>
-		{% for m in job %}
-			{% if m.valid != 0 and m.done != 0 and m.expire != 0 %}
-				<div class="col-md-4 col-sm-6">
-					<div class="jobs">
-						<a href="{{ path('zephyr_admin_edit', {id:m.id}) }}">
-							<div id="ticket">
-								<br>
-								<h4><b>{{ m.title }}</b></h4>
-								<p>{{ m.category }}</p><br>
-								<p>{{ m.shortcontent }}<p>
-							</div>
-						</a>
-					</div>
-				</div>
-			{% endif %}
-		{% endfor %}
-	</div>
 {% endblock %}
