@@ -93,8 +93,8 @@ class DefaultController extends Controller
                     ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
                     ->setTo(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
                     ->setCC(array(
-                        //'alizee.perrin@edu.esiee.fr' => "Alizée PERRIN",
-                        //'sarah.arnedoslopez@edu.esiee.fr'  => "Sarah ARNEDOS LOPEZ",
+                        'alizee.perrin@edu.esiee.fr' => "Alizée PERRIN",
+                        'sarah.arnedoslopez@edu.esiee.fr'  => "Sarah ARNEDOS LOPEZ",
                     ))
                     ->setBody(
                         $this->renderView(
@@ -205,8 +205,8 @@ class DefaultController extends Controller
                     ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
                     ->setTo(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
                     ->setCC(array(
-                        //'alizee.perrin@edu.esiee.fr' => "Alizée PERRIN",
-                        //'sarah.arnedoslopez@edu.esiee.fr'  => "Sarah ARNEDOS LOPEZ",
+                        'alizee.perrin@edu.esiee.fr' => "Alizée PERRIN",
+                        'sarah.arnedoslopez@edu.esiee.fr'  => "Sarah ARNEDOS LOPEZ",
                     ))
                     ->setBody(
                         $this->renderView(
