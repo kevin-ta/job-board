@@ -29,6 +29,7 @@
                 </div>
                 <div class="collapse navbar-collapse" id="navbar">
                     <ul class="nav navbar-nav navbar-right">
+                        <li><a href="{{ path('zephyr_job_faq') }}">FAQ</a></li>
                         {% if is_granted('ROLE_EXTERNE') %}
                             <li><a href="{{ path('zephyr_job_create') }}">POSTER UN JOB</a></li>
                         {% endif %}

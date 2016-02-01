@@ -38,7 +38,6 @@ class DefaultController extends Controller
     public function jobAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $um = $this->get('fos_user.user_manager');
         $job = $em->getRepository('ZephyrJobBundle:Job')->findOneById($id);
         $user = $this->get('security.context')->getToken()->getUser();
         $already = null;
@@ -105,7 +104,7 @@ class DefaultController extends Controller
                                 'job' => $job->getId(),
                                 'cv' => $request->request->get('cv'),
                                 'pdf' => $pdf,
-                                'lien' => 'https://bde.esiee.fr/job-board/admin/edit/'.$job->getId()
+                                'lien' => 'https://bde.esiee.fr/job-board/edit/'.$job->getId()
                             )
                         )
                     );
@@ -147,9 +146,7 @@ class DefaultController extends Controller
     public function createAction(Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $um = $this->get('fos_user.user_manager');
         $user = $this->get('security.context')->getToken()->getUser();
-        $role = $this->get('security.context')->getToken()->getRoles();
 
         $job = new Job();
         $form = $this->createForm(new JobType($em), $job);
@@ -165,31 +162,16 @@ class DefaultController extends Controller
                     'job' => $job,
                 ));
             }
-
-            $checkbox = $request->request->get('checkbox');
+            
             $job->setValid(0);
             $job->setExpire(0);
             $job->setDone(0);
 
-            if($role[0] == 'ROLE_SUPER_ADMIN')
+            if($user->hasRole('ROLE_SUPER_ADMIN'))
             {
-                if($checkbox != null)
+                if($request->request->get('checkbox') != null)
                 {
-                    foreach($checkbox as $value)
-                    {
-                        if($value == 'valid')
-                        {
-                            $job->setValid(1);
-                        }
-                        elseif($value == 'expire')
-                        {
-                            $job->setExpire(1);
-                        }
-                        elseif($value == 'done')
-                        {
-                            $job->setDone(1);
-                        }
-                    }
+                    $job->setValid(1);
                 }
             }
 
@@ -198,7 +180,7 @@ class DefaultController extends Controller
             $em->persist($job);
             $em->flush();
 
-            if($role[0] != 'ROLE_SUPER_ADMIN')
+            if(!$user->hasRole('ROLE_SUPER_ADMIN'))
             {
                 $message1 = \Swift_Message::newInstance()
                     ->setSubject('[Team Jobs] Nouvelle annonce disponible')
@@ -215,7 +197,7 @@ class DefaultController extends Controller
                                 'name' => 'la Team Jobs',
                                 'objet' => 'Une annonce est arrivée sur la plateforme Job. Vous êtes priés de bien vouloir y jeter un oeil.',
                                 'job' => $job->getId(),
-                                'lien' => 'https://bde.esiee.fr/job-board/admin/edit/'.$job->getId()
+                                'lien' => 'https://bde.esiee.fr/job-board/edit/'.$job->getId()
                             )
                         )
                     );
@@ -272,7 +254,6 @@ class DefaultController extends Controller
     public function editAction($id, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
-        $um = $this->get('fos_user.user_manager');
         $job = $em->getRepository('ZephyrJobBundle:Job')->findOneById($id);
         $user = $this->get('security.context')->getToken()->getUser();
 
@@ -280,7 +261,10 @@ class DefaultController extends Controller
         {
             return $this->redirectToRoute('zephyr_job_homepage');
         }
-        else if($user != $job->getOwner() && !$user->hasRole('ROLE_SUPER_ADMIN'))
+        else if($user->hasRole('ROLE_SUPER_ADMIN')) 
+        {
+        }
+        else if($user == $job->getOwner())
         {
             return $this->redirectToRoute('zephyr_job_homepage');
         }
@@ -298,27 +282,30 @@ class DefaultController extends Controller
                     'job' => $job,
                 ));
             }
-
-            $checkbox = $request->request->get('checkbox');
+           
             $job->setValid(0);
             $job->setExpire(0);
             $job->setDone(0);
-
-            if($checkbox != null)
+            
+            if($user->hasRole('ROLE_SUPER_ADMIN'))
             {
-                foreach($checkbox as $value)
+                $checkbox = $request->request->get('checkbox');
+                if($checkbox != null)
                 {
-                    if($value == 'valid')
+                    foreach($checkbox as $value)
                     {
-                        $job->setValid(1);
-                    }
-                    elseif($value == 'expire')
-                    {
-                        $job->setExpire(1);
-                    }
-                    elseif($value == 'done')
-                    {
-                        $job->setDone(1);
+                        if($value == 'valid')
+                        {
+                            $job->setValid(1);
+                        }
+                        elseif($value == 'expire')
+                        {
+                            $job->setExpire(1);
+                        }
+                        elseif($value == 'done')
+                        {
+                            $job->setDone(1);
+                        }
                     }
                 }
             }
@@ -326,40 +313,24 @@ class DefaultController extends Controller
             $em->persist($job);
             $em->flush();
 
-            if($job->getValid() == 1)
+            if($user->hasRole('ROLE_SUPER_ADMIN'))
             {
-                $message = \Swift_Message::newInstance()
-                ->setSubject('[Team Jobs] Annonce modifiée')
-                ->setFrom(array('bde@edu.esiee.fr' => 'BDE ESIEE Paris'))
-                ->setTo(array($job->getOwner()->getEmail() => ucfirst($job->getOwner()->getFirstname())." ".strtoupper($job->getOwner()->getLastname())))
-                ->setBody(
-                    $this->renderView(
-                        'ZephyrJobBundle:Email:create.html.twig',
-                        array(
-                            'name' => $job->getOwner()->getFirstname()." ".$job->getOwner()->getLastname(),
-                            'objet' => "Votre annonce a été validée par le BDE. Nous vous tiendrons informer de toute candidature potentielle.",
-                            'job' => $job->getId(),
-                            'lien' => 'https://bde.esiee.fr/job-board/admin/edit/'.$job->getId()
-                        )
-                    )
-                );
-                $this->get('mailer')->send($message);
-
-                return $this->redirectToRoute('zephyr_job_job', array(
-                    'id' => $job->getId(),
-                    'success' => 'Votre annonce a été éditée.',
-                ));
+                return $this->redirectToRoute('zephyr_admin');
             }
-
-            return $this->redirectToRoute('zephyr_job_homepage', array(
-                'id' => $job->getId(),
-                'success' => 'Votre annonce a été éditée.',
-            ));
+            else
+            {
+                return $this->redirectToRoute('fos_user_profile_show');
+            }
         }
 
         return $this->render('ZephyrJobBundle:Default:edit.html.twig', array(
             'form' => $form->createView(),
             'job' => $job,
         ));
+    }
+
+    public function faqAction()
+    {
+        return $this->render('ZephyrJobBundle:Default:faq.html.twig');
     }
 }

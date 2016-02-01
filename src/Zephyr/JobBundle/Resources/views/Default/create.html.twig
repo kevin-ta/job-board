@@ -32,6 +32,13 @@
 	    			{{ form_label(form.content) }}
 	            	{{ form_widget(form.content, {'attr': {'class': 'form-control'}}) }}
 		  		</div><br>
+		  		{% if is_granted('ROLE_SUPER_ADMIN') %}
+	  				<div class="checkbox">
+						<label>
+	  						<input type="checkbox" name="checkbox[]" value="valid" {% if job.valid == 1 %}checked{% endif %}> Validé
+						</label>
+		  			</div>
+		  		{% endif %}
 		  		<button type="submit" class="btn btn-default">Créer une annonce</button>
 			</form>
 		</div>
