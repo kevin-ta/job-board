@@ -264,7 +264,7 @@ class DefaultController extends Controller
         else if($user->hasRole('ROLE_SUPER_ADMIN')) 
         {
         }
-        else if($user == $job->getOwner())
+        else if($user != $job->getOwner())
         {
             return $this->redirectToRoute('zephyr_job_homepage');
         }
