@@ -47,4 +47,4 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/create, role: ROLE_EXTERNE }
-        - { path: ^/admin, role: ROLE_SUPER_ADMIN }
+        - { path: ^/edit, role: ROLE_EXTERNE }
