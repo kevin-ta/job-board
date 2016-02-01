@@ -7,9 +7,14 @@ zephyr_job_job:
     defaults: { _controller: ZephyrJobBundle:Default:job }
 
 zephyr_job_create:
-    path:     /create
+    path:     /create/
     defaults: { _controller: ZephyrJobBundle:Default:create }
 
 zephyr_job_edit:
     path:     /edit/{id}
     defaults: { _controller: ZephyrJobBundle:Default:edit }
+
+zephyr_job_faq:
+    path:     /faq/
+    defaults: { _controller: ZephyrJobBundle:Default:faq }
+
