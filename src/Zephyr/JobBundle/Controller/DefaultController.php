@@ -71,7 +71,7 @@ class DefaultController extends Controller
         {
             if($himself == null && $already == null)
             {
-                if($request->files->get('pdf')->getMimeType()=="application/pdf")
+                if(null != $request->files->get('pdf') && $request->files->get('pdf')->getMimeType() == "application/pdf")
                 {
                     $cvname = md5(uniqid()).'.'.$request->files->get('pdf')->guessExtension();
                     $cvdir = $this->container->getParameter('kernel.root_dir').'/../web/uploads/cv';
@@ -131,7 +131,8 @@ class DefaultController extends Controller
 
                 return $this->render('ZephyrJobBundle:Default:job.html.twig', array(
                     'success' => 'Votre demande va être étudiée par notre équipe Jobs. Vous allez recevoir une confirmation par mail.',
-                    'job' => $job,
+                    'job'     => $job,
+                    'himself' => $himself,
                 ));
             }
         }
