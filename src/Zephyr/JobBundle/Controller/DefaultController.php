@@ -12,7 +12,7 @@ class DefaultController extends Controller
     public function indexAction()
     {
     	$em = $this->getDoctrine()->getManager();
-    	$jobs = $em->getRepository('ZephyrJobBundle:Job')->findAll();
+    	$jobs = $em->getRepository('ZephyrJobBundle:Job')->findBy(array(), array('date' => 'DESC'));
     	$total = count($jobs);
     	$valid = 0;
         $not_valid = 0;
