@@ -13,11 +13,11 @@
 	  		<p>{{ success }}</p>
 		</div>
 	{% endif %}
-	<img src="{{ asset('css/logo.png') }}" class="img-responsive" align="middle"></img>
+	<img src="{{ asset('css/logo.png') }}?v2" class="img-responsive" align="middle"></img>
 	<br><br>
 	<div class="compteur">
 		<ul>
-			<li>
+			<li style="padding-left: 0px;">
 				<p>{{ valid }}<br><span>job{% if valid != 1 and valid != 0 %}s{% endif %}<br>en ligne</span></p>
 			</li>
 			<li>
